@@ -1,2 +1,6 @@
 /target
 /erc20cairo
+account0_account.json
+account0_keystore.json
+args.constructor
+constructor

@@ -7,4 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
+starknet = { git = "https://github.com/xJonathanLEI/starknet-rs" }
 toml = "0.8.13"
+serde = "1.0.136"
+serde_derive = "1.0.136"
