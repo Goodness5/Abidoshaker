@@ -161,55 +161,45 @@ fn parse_constructor_args(constructor_inputs: &Option<String>) -> Vec<String> {
                     |contents| {
                         contents
                             .trim()
-                            .split(',')
+                            .split_whitespace()
                             .map(|s| s.trim().to_string())
                             .collect()
                     },
                 )
             } else {
                 input
-                    .split(',')
+                    .split_whitespace()
                     .map(|s| s.trim().to_string())
                     .collect()
             }
         }
         None => Vec::new(),
     }
-    .into_iter()
-    .flat_map(|arg| {
-        arg.split(',')
-            .map(str::trim)
-            .filter(|s| !s.is_empty())
-            .map(String::from)
-            .collect::<Vec<String>>()
-    })
-    .map(|arg| {
-        
-        arg.replace(r#"\\(?=[^"])"#, "")
-    })
-    .collect()
 }
 
 fn deploy_contract(class_hash: &str, constructor_args: &[String], base_dir: &PathBuf) {
     println!("Deploying contract.....");
 
-    // Prepare the deploy arguments as a mutable vector
-    let mut deploy_args: Vec<&str> = vec![
-        "deploy",
-        "--account",
-        "account0_account.json",
-        class_hash,
-        "--rpc",
-        "https://free-rpc.nethermind.io/sepolia-juno",
-        "--keystore",
-        "account0_keystore.json",
+    // Prepare the deploy arguments as a mutale vector
+    let mut deploy_args: Vec<String> = vec![
+        "deploy".to_string(),
+        "--account".to_string(),
+        "account0_account.json".to_string(),
+        class_hash.to_string(),
+        "--rpc".to_string(),
+        "https://free-rpc.nethermind.io/sepolia-juno".to_string(),
+        "--keystore".to_string(),
+        "account0_keystore.json".to_string(),
+        "--fee-token".to_string(),
+        "STRK".to_string(),
+        // constructor_args
     ];
 
     // Only add constructor arguments if they exist
     if !constructor_args.is_empty() {
         // Extend the deploy_args with the constructor arguments
         for arg in constructor_args {
-            deploy_args.push(arg);
+            deploy_args.push(arg.clone()); // Add each argument as is
         }
     }
 
@@ -221,6 +211,7 @@ fn deploy_contract(class_hash: &str, constructor_args: &[String], base_dir: &Pat
         .status()
         .expect("Failed to deploy the contract");
 
+        println!("cleaned deploy commans  {:?}", deploy_command);
     if !deploy_command.success() {
         eprintln!("Deploy command failed");
         exit(1);
