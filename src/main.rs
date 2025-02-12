@@ -192,7 +192,7 @@ fn deploy_contract(class_hash: &str, constructor_args: &[String], base_dir: &Pat
         "account0_keystore.json".to_string(),
         "--fee-token".to_string(),
         "STRK".to_string(),
-        // constructor_args
+        "2000 0x07ab19dfcc6981ad7beba769a71a2d1cdd52b3d8a1484637bbb79f18a170cd51".to_string()
     ];
 
     // Only add constructor arguments if they exist
